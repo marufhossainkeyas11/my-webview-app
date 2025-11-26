@@ -1,0 +1,29 @@
+workflows:
+  android-build:
+    name: Remote Control 
+    instance_type: mac_mini_medium
+    environment:
+      # Use a stable version of Flutter and Android SDK
+      flutter: stable
+      xcode: latest
+      node: 16
+      java: 17
+
+    scripts:
+      - name: Set up environment
+        script: |
+          # The project is structured with an 'android' subfolder inside the root
+          # We need to tell the script where the Android project lives.
+          cd android 
+      
+      - name: Build APK (Release Mode)
+        script: |
+          # Clean any previous build output
+          ./gradlew clean
+          # Run the standard Android build command for release APK
+          ./gradlew assembleRelease
+
+    artifacts:
+      # The resulting APK will be found in the Android build folder
+      - android/app/build/outputs/apk/release/*.apk
+      
