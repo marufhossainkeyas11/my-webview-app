@@ -1,29 +1,26 @@
 workflows:
   android-build:
-    name: Remote Control 
+    name: Android Build for Local Webview
     instance_type: mac_mini_medium
     environment:
-      # Use a stable version of Flutter and Android SDK
-      flutter: stable
-      xcode: latest
+      # Use Node for Capacitor setup
       node: 16
       java: 17
 
     scripts:
-      - name: Set up environment
+      - name: Install dependencies
         script: |
-          # The project is structured with an 'android' subfolder inside the root
-          # We need to tell the script where the Android project lives.
-          cd android 
+          npm install
+          
+      - name: Build web assets
+        script: |
+          npx cap copy
       
       - name: Build APK (Release Mode)
         script: |
-          # Clean any previous build output
-          ./gradlew clean
-          # Run the standard Android build command for release APK
+          cd android
           ./gradlew assembleRelease
 
     artifacts:
-      # The resulting APK will be found in the Android build folder
+      # Path to the resulting APK file
       - android/app/build/outputs/apk/release/*.apk
-      
