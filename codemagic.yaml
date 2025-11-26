@@ -1,20 +1,22 @@
 workflows:
   android-build:
     name: Android Build for Local Webview
-    instance_type: mac_mini_medium
+    # Changed instance_type to a valid member (e.g., linux_x2 or mac_mini_m1)
+    # Using 'linux_x2' as it is usually free/cheap and powerful enough.
+    instance_type: linux_x2 
+    max_build_duration: 60
+    
     environment:
-      # Use Node for Capacitor setup
+      # We need an environment that supports Node and Android SDK (which Linux/Mac types do)
       node: 16
       java: 17
 
     scripts:
       - name: Install dependencies
-        script: |
-          npm install
+        script: npm install
           
       - name: Build web assets
-        script: |
-          npx cap copy
+        script: npx cap copy
       
       - name: Build APK (Release Mode)
         script: |
@@ -24,3 +26,5 @@ workflows:
     artifacts:
       # Path to the resulting APK file
       - android/app/build/outputs/apk/release/*.apk
+
+
